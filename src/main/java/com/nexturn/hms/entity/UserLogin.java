@@ -18,9 +18,9 @@ public class UserLogin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="user_id")
 	private int userId;
-    @Column(nullable = false, unique = true,length=25)
+    @Column(nullable = false, unique = true,length=50)
 	private String userName;
-    @Column(nullable = false,length=25)
+    @Column(nullable = false,length=35)
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable=false,length=20)

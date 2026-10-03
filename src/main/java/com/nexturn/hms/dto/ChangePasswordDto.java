@@ -1,5 +1,10 @@
 package com.nexturn.hms.dto;
 
-public record ChangePasswordDto(int userId,String oldPassword, String newPassword) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record ChangePasswordDto(
+		@NotBlank String oldPassword,
+		@NotBlank @Size(max = 50) String newPassword) {
 
 }

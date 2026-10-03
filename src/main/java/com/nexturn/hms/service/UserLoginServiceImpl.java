@@ -2,7 +2,6 @@ package com.nexturn.hms.service;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.ChangePasswordDto;
@@ -10,9 +9,11 @@ import com.nexturn.hms.dto.LoginRequestDto;
 import com.nexturn.hms.dto.LoginResponseDto;
 import com.nexturn.hms.dto.NewUserRequestDto;
 import com.nexturn.hms.dto.UserCredentialsResponseDto;
+import com.nexturn.hms.dto.UsersByRoleResponseDto;
 import com.nexturn.hms.entity.Role;
 import com.nexturn.hms.entity.UserLogin;
 import com.nexturn.hms.exceptions.InvalidCredentialsException;
+import com.nexturn.hms.exceptions.UserNotFoundException;
 import com.nexturn.hms.repository.UserLoginRepository;
 
 @Service
@@ -58,32 +59,31 @@ public class UserLoginServiceImpl implements UserLoginService{
 	}
 
 	@Override
-	public void changePassword(ChangePasswordDto dto) {
-		Optional<UserLogin> login=repo.findById(dto.userId());
-		UserLogin user=login.get();
-		if(!user.getPassword().equals(dto.oldPassword())) {
+	public void changePassword(int userId, ChangePasswordDto dto) {
+		UserLogin login = repo.findById(userId).orElseThrow(
+				() -> new UserNotFoundException("User not found with id: " + userId));
+		if (!login.getPassword().equals(dto.oldPassword())) {
 			throw new InvalidCredentialsException("Invalid Old Password,Please Enter valid Password");
 		}
-		else {
-			user.setPassword(dto.newPassword());
-			repo.save(user);
-		}
-		
+		login.setPassword(dto.newPassword());
+		repo.save(login);
 	}
 	
 
 	@Override
+	@Transactional
 	public void deleteUser(int userId) {
+		if (!repo.existsById(userId)) {
+			throw new UserNotFoundException("User not found with id: " + userId);
+		}
 		repo.deleteById(userId);
-		
 	}
 
 	@Override
-	public List<UserLogin> getUsersByRole(Role role) {
-		List<UserLogin> userList=repo.findAllByRole(role);
-		return userList;
+	public List<UsersByRoleResponseDto> getUsersByRole(Role role) {
+		return repo.findAllByRole(role).stream()
+				.map(u -> new UsersByRoleResponseDto(u.getUserId(),u.getUserName(),u.getRole()))
+				.toList();
 	}
-
-	
 
 }

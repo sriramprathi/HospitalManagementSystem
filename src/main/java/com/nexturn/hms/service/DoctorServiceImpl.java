@@ -1,6 +1,8 @@
 package com.nexturn.hms.service;
 
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.DoctorRegisteredResponseDto;
@@ -21,12 +23,14 @@ public class DoctorServiceImpl implements DoctorService {
 	private final DoctorRepository doctorRepo;
 	private final UserLoginRepository loginRepo;
 	private final UserLoginService userLoginService;
+	private final ModelMapper modelMapper;
 
 	public DoctorServiceImpl(DoctorRepository doctorRepo, UserLoginRepository loginRepo,
-			UserLoginService userLoginService) {
+			UserLoginService userLoginService, ModelMapper modelMapper) {
 		this.doctorRepo = doctorRepo;
 		this.loginRepo = loginRepo;
 		this.userLoginService = userLoginService;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
@@ -34,12 +38,10 @@ public class DoctorServiceImpl implements DoctorService {
 	public DoctorRegisteredResponseDto addDoctor(DoctorRequestDto dto) {
 		UserCredentialsResponseDto creds = userLoginService
 				.registerNewUser(new NewUserRequestDto(dto.firstName(), dto.lastName(), Role.Doctor));
-
 		Doctor doctor = new Doctor();
 		doctor.setLogin(loginRepo.getReferenceById(creds.userId()));
 		applyDetails(doctor, dto);
 		doctor = doctorRepo.save(doctor);
-
 		return new DoctorRegisteredResponseDto(doctor.getDoctorId(), creds.userName(), creds.password());
 	}
 
@@ -77,7 +79,6 @@ public class DoctorServiceImpl implements DoctorService {
 	@Transactional
 	public void deleteDoctor(int doctorId) {
 		Doctor doctor = findDoctor(doctorId);
-		// deleting the user also removes the doctor row (cascade = ALL on UserLogin)
 		userLoginService.deleteUser(doctor.getLogin().getUserId());
 	}
 
@@ -86,13 +87,9 @@ public class DoctorServiceImpl implements DoctorService {
 				.orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id: " + doctorId));
 	}
 
-	private void applyDetails(Doctor doctor, DoctorRequestDto dto) {
-		doctor.setFirstName(dto.firstName());
-		doctor.setLastName(dto.lastName());
-		doctor.setDepartment(dto.department());
-		doctor.setQualification(dto.qualification());
-		doctor.setPhoneNumber(dto.phoneNumber());
-		doctor.setConsultationFee(dto.consultationFee());
+	private Doctor applyDetails(Doctor doctor, DoctorRequestDto dto) {
+	    modelMapper.map(dto, doctor);
+	    return doctor;
 	}
 
 	private DoctorResponseDto toResponse(Doctor d) {

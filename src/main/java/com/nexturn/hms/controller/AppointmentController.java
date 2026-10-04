@@ -30,7 +30,6 @@ public class AppointmentController {
    private final AppointmentService appointmentService;
 
    public AppointmentController(AppointmentService appointmentService) {
-	super();
 	this.appointmentService = appointmentService;
    }
 
@@ -47,7 +46,7 @@ public class AppointmentController {
 	public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsByPatient(@PathVariable int patientId) {
 		return ResponseEntity.ok(appointmentService.getAppointmentsByPatient(patientId));
 	}
-    @GetMapping("/doctor/{DoctorId}")
+    @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsByDoctor(@PathVariable int doctorId) {
     	return ResponseEntity.ok(appointmentService.getAppointmentsByDoctor(doctorId));
     }

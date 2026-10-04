@@ -1,7 +1,11 @@
 package com.nexturn.hms.service;
 
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.nexturn.hms.dto.NewUserRequestDto;
 import com.nexturn.hms.dto.PatientRegisteredResponseDto;
 import com.nexturn.hms.dto.PatientRequestDto;
@@ -13,30 +17,30 @@ import com.nexturn.hms.exceptions.PatientNotFoundException;
 import com.nexturn.hms.repository.PatientRepository;
 import com.nexturn.hms.repository.UserLoginRepository;
 
-import jakarta.transaction.Transactional;
-
-
-
 @Service
 public class PatientServiceImpl implements PatientService {
 
 	private final PatientRepository patientRepo;
 	private final UserLoginRepository loginRepo;
 	private final UserLoginService userLoginService;
+	private final ModelMapper modelMapper;
 
 	public PatientServiceImpl(PatientRepository patientRepo, UserLoginRepository loginRepo,
-			UserLoginService userLoginService) {
+			UserLoginService userLoginService, ModelMapper modelMapper) {
 		this.patientRepo = patientRepo;
 		this.loginRepo = loginRepo;
 		this.userLoginService = userLoginService;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
 	@Transactional
 	public PatientRegisteredResponseDto registerPatient(PatientRequestDto dto) {
+		// 1. create the login first (role is always PATIENT, never taken from the request)
 		UserCredentialsResponseDto creds = userLoginService
 				.registerNewUser(new NewUserRequestDto(dto.firstName(), dto.lastName(), Role.Patient));
 
+		// 2. save the patient linked to that login
 		Patient patient = new Patient();
 		patient.setLogin(loginRepo.getReferenceById(creds.userId()));
 		applyDetails(patient, dto);
@@ -84,14 +88,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	private void applyDetails(Patient patient, PatientRequestDto dto) {
-		patient.setFirstName(dto.firstName());
-		patient.setLastName(dto.lastName());
-		patient.setGender(dto.gender());
-		patient.setDateOfBirth(dto.dateOfBirth());
-		patient.setPhoneNumber(dto.phoneNumber());
-		patient.setBloodType(dto.bloodType());
-		patient.setEmergencyContact(dto.emergencyContact());
-		patient.setPatientType(dto.patientType());
+		modelMapper.map(dto, patient);
 	}
 
 	private PatientResponseDto toResponse(Patient p) {

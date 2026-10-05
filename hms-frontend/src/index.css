@@ -1,0 +1,151 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ---------- Theme tokens (override Bootstrap's primary colour) ---------- */
+:root {
+  --hms-primary: #0f766e;
+  --hms-primary-dark: #115e59;
+  --hms-accent: #2dd4bf;
+  --hms-side: #0f1f2e;
+  --hms-bg: #f3f6f9;
+  --hms-line: #e3e8ee;
+  --hms-text: #1f2937;
+
+  --bs-primary: #0f766e;
+  --bs-primary-rgb: 15, 118, 110;
+  --bs-link-color: #0f766e;
+  --bs-link-hover-color: #115e59;
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bs-body-color: var(--hms-text);
+  --bs-border-radius: 0.5rem;
+}
+
+body {
+  background: var(--hms-bg);
+  font-size: 0.925rem;
+}
+
+/* Bootstrap 5.3 hard-codes button colours, so the primary buttons are themed here */
+.btn-primary {
+  --bs-btn-bg: var(--hms-primary);
+  --bs-btn-border-color: var(--hms-primary);
+  --bs-btn-hover-bg: var(--hms-primary-dark);
+  --bs-btn-hover-border-color: var(--hms-primary-dark);
+  --bs-btn-active-bg: var(--hms-primary-dark);
+  --bs-btn-active-border-color: var(--hms-primary-dark);
+  --bs-btn-disabled-bg: var(--hms-primary);
+  --bs-btn-disabled-border-color: var(--hms-primary);
+  --bs-btn-focus-shadow-rgb: 15, 118, 110;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--hms-primary);
+  --bs-btn-border-color: var(--hms-primary);
+  --bs-btn-hover-bg: var(--hms-primary);
+  --bs-btn-hover-border-color: var(--hms-primary);
+  --bs-btn-active-bg: var(--hms-primary-dark);
+  --bs-btn-active-border-color: var(--hms-primary-dark);
+  --bs-btn-focus-shadow-rgb: 15, 118, 110;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--hms-primary);
+  box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.18);
+}
+.form-label { font-weight: 500; font-size: 0.85rem; margin-bottom: 0.3rem; }
+
+/* ---------- Top navbar ---------- */
+.topbar { background: #fff; border-bottom: 1px solid var(--hms-line); height: 56px; }
+.topbar .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.1rem; color: var(--hms-side); }
+.brand-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--hms-primary); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(15, 118, 110, 0.12); color: var(--hms-primary);
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 600;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar { width: 250px; min-width: 250px; background: var(--hms-side); min-height: calc(100vh - 56px); padding: 1rem 0; }
+@media (min-width: 768px) {
+  .sidebar { position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; align-self: flex-start; }
+}
+@media (max-width: 767.98px) {
+  .sidebar { position: absolute; z-index: 1030; height: calc(100vh - 56px); box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25); }
+}
+.sidebar-link {
+  display: flex; align-items: center;
+  padding: 0.65rem 1.25rem;
+  color: #a9b8c8; text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.sidebar-link i { width: 1.6rem; font-size: 1.05rem; }
+.sidebar-link:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+.sidebar-link.active { color: #fff; background: rgba(45, 212, 191, 0.12); border-left-color: var(--hms-accent); }
+.sidebar-link:focus-visible { outline: 2px solid var(--hms-accent); outline-offset: -2px; }
+
+/* ---------- Page content: cards, tables, modals ---------- */
+main h4 { font-size: 1.3rem; font-weight: 600; }
+
+main .card.border-0 {
+  border: 1px solid var(--hms-line) !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04) !important;
+  border-radius: 0.65rem;
+}
+.card-header.bg-white { border-bottom: 1px solid var(--hms-line); font-weight: 600; }
+
+.table { --bs-table-hover-bg: #f6fafa; }
+.table > thead.table-light { --bs-table-bg: #f8fafc; --bs-table-color: #475467; }
+.table > thead th {
+  font-size: 0.8rem; font-weight: 600; white-space: nowrap;
+  border-bottom: 1px solid var(--hms-line); padding-top: 0.8rem; padding-bottom: 0.8rem;
+}
+.table > tbody > tr > td { padding-top: 0.75rem; padding-bottom: 0.75rem; border-color: #eef1f5; }
+
+.badge { font-weight: 500; padding: 0.4em 0.7em; }
+.list-group-item { border-color: var(--hms-line); }
+
+.modal-content { border: 0; border-radius: 0.75rem; box-shadow: 0 10px 40px rgba(15, 31, 46, 0.2); }
+.modal-header { border-bottom: 1px solid var(--hms-line); }
+.modal-title { font-weight: 600; }
+
+/* ---------- Dashboard ---------- */
+.welcome-panel {
+  background: linear-gradient(120deg, var(--hms-primary-dark), var(--hms-primary));
+  color: #fff; border-radius: 0.75rem; padding: 1.5rem;
+}
+.welcome-panel .welcome-icon { font-size: 3rem; opacity: 0.25; }
+
+.stat-card { display: block; text-decoration: none; color: inherit; transition: box-shadow 0.15s ease; }
+a.stat-card:hover { box-shadow: 0 4px 14px rgba(16, 24, 40, 0.1) !important; color: inherit; }
+.stat-icon {
+  width: 52px; height: 52px; border-radius: 12px; font-size: 1.5rem;
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.stat-icon.primary { background: rgba(15, 118, 110, 0.12); color: var(--hms-primary); }
+.stat-icon.success { background: rgba(25, 135, 84, 0.12); color: #198754; }
+.stat-icon.warning { background: rgba(255, 193, 7, 0.2); color: #a67c00; }
+.stat-icon.danger  { background: rgba(220, 53, 69, 0.12); color: #dc3545; }
+.stat-icon.info    { background: rgba(13, 202, 240, 0.15); color: #087990; }
+
+.quick-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1rem; text-decoration: none; color: var(--hms-text); }
+.quick-link:hover { color: var(--hms-primary); }
+.quick-link i { font-size: 1.3rem; color: var(--hms-primary); }
+
+/* ---------- Login ---------- */
+.login-brand-panel {
+  background: linear-gradient(160deg, var(--hms-side), var(--hms-primary-dark));
+  color: #fff;
+}
+.login-brand-panel .big-icon { font-size: 4.5rem; color: var(--hms-accent); }
+.login-card { width: 100%; max-width: 380px; }
+.input-group-text { background: #f8fafc; color: #667085; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card { transition: none; }
+}
+
+/* hide the browser's built-in password reveal icon (Edge) */
+input::-ms-reveal,
+input::-ms-clear { display: none; }

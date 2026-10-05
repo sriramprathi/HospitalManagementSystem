@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-
+  // user = { userId, role, profileId }  (profileId = patientId or doctorId)
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("hmsUser"));
@@ -22,12 +22,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  return (
-    <AuthContext.Provider value={{ user, signIn, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, signIn, signOut }}>{children}</AuthContext.Provider>;
 }
 
-// shortcut so pages write useAuth() instead of useContext(AuthContext)
 export const useAuth = () => useContext(AuthContext);

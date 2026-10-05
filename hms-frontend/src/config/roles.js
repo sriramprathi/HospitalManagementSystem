@@ -1,4 +1,3 @@
-
 export const PATHS = {
   dashboard: "/dashboard",
   patients: "/patients",
@@ -10,51 +9,30 @@ export const PATHS = {
   bills: "/bills",
 };
 
+const dashboard = { label: "Dashboard", path: PATHS.dashboard, icon: "bi-speedometer2" };
+const patients = { label: "Patients", path: PATHS.patients, icon: "bi-people" };
+const doctors = { label: "Doctors", path: PATHS.doctors, icon: "bi-person-badge" };
+const appointments = { label: "Appointments", path: PATHS.appointments, icon: "bi-calendar-check" };
+const book = { label: "Book Appointment", path: PATHS.bookAppointment, icon: "bi-calendar-plus" };
+const medicines = { label: "Medicines", path: PATHS.medicines, icon: "bi-capsule" };
+const prescriptions = { label: "Prescriptions", path: PATHS.prescriptions, icon: "bi-file-medical" };
+const bills = { label: "Bills", path: PATHS.bills, icon: "bi-receipt" };
+
+// Role names must match the backend Role enum exactly
 export const ROLES = {
-  Administrator: {
-    menu: [
-      { label: "Dashboard", path: PATHS.dashboard },
-      { label: "Patients", path: PATHS.patients },
-      { label: "Doctors", path: PATHS.doctors },
-      { label: "Appointments", path: PATHS.appointments },
-      { label: "Medicines", path: PATHS.medicines },
-      { label: "Prescriptions", path: PATHS.prescriptions },
-      { label: "Bills", path: PATHS.bills },
-    ],
-  },
-  Doctor: {
-    menu: [
-      { label: "Dashboard", path: PATHS.dashboard },
-      { label: "Appointments", path: PATHS.appointments },
-      { label: "Prescriptions", path: PATHS.prescriptions },
-      { label: "Patients", path: PATHS.patients },
-    ],
-  },
+  Administrator: { menu: [dashboard, patients, doctors, appointments, medicines, prescriptions, bills] },
+  Doctor: { menu: [dashboard, appointments, prescriptions, patients] },
   Patient: {
     menu: [
-      { label: "Dashboard", path: PATHS.dashboard },
-      { label: "Book Appointment", path: PATHS.bookAppointment },
-      { label: "My Appointments", path: PATHS.appointments },
-      { label: "My Prescriptions", path: PATHS.prescriptions },
-      { label: "My Bills", path: PATHS.bills },
+      dashboard,
+      book,
+      { ...appointments, label: "My Appointments" },
+      { ...prescriptions, label: "My Prescriptions" },
+      { ...bills, label: "My Bills" },
     ],
   },
-  Pharmacist: {
-    menu: [
-      { label: "Dashboard", path: PATHS.dashboard },
-      { label: "Medicines", path: PATHS.medicines },
-      { label: "Prescriptions", path: PATHS.prescriptions },
-    ],
-  },
-  Receptionist: {
-    menu: [
-      { label: "Dashboard", path: PATHS.dashboard },
-      { label: "Patients", path: PATHS.patients },
-      { label: "Appointments", path: PATHS.appointments },
-      { label: "Book Appointment", path: PATHS.bookAppointment },
-      { label: "Bills", path: PATHS.bills },
-    ],
-  },
+  Pharmacist: { menu: [dashboard, medicines, prescriptions] },
+  Receptionist: { menu: [dashboard, patients, appointments, book, bills] },
 };
 
 export function canAccess(role, path) {

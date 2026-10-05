@@ -2,6 +2,8 @@ package com.nexturn.hms.service;
 
 import java.security.SecureRandom;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.ChangePasswordDto;
@@ -19,12 +21,9 @@ import com.nexturn.hms.repository.UserLoginRepository;
 @Service
 public class UserLoginServiceImpl implements UserLoginService{
 
-	private final UserLoginRepository repo;
-	private final SecureRandom random = new SecureRandom();
-
-	public UserLoginServiceImpl(UserLoginRepository repo) {
-		this.repo = repo;
-	}
+	@Autowired
+	UserLoginRepository repo;
+	SecureRandom random = new SecureRandom();
 
 	@Override
 	@Transactional

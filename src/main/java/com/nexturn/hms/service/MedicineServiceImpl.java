@@ -3,6 +3,7 @@ package com.nexturn.hms.service;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +18,9 @@ import com.nexturn.hms.repository.MedicineRepository;
 @Service
 public class MedicineServiceImpl implements MedicineService {
 
-	private final MedicineRepository medicineRepo;
-	private final ModelMapper modelMapper;
-
-	public MedicineServiceImpl(MedicineRepository medicineRepo, ModelMapper modelMapper) {
-		this.medicineRepo = medicineRepo;
-		this.modelMapper = modelMapper;
-	}
+	@Autowired
+	MedicineRepository medicineRepo;
+	ModelMapper modelMapper;
 
 	@Override
 	@Transactional

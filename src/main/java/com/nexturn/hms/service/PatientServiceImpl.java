@@ -3,6 +3,7 @@ package com.nexturn.hms.service;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +21,11 @@ import com.nexturn.hms.repository.UserLoginRepository;
 @Service
 public class PatientServiceImpl implements PatientService {
 
-	private final PatientRepository patientRepo;
-	private final UserLoginRepository loginRepo;
-	private final UserLoginService userLoginService;
-	private final ModelMapper modelMapper;
-
-	public PatientServiceImpl(PatientRepository patientRepo, UserLoginRepository loginRepo,
-			UserLoginService userLoginService, ModelMapper modelMapper) {
-		this.patientRepo = patientRepo;
-		this.loginRepo = loginRepo;
-		this.userLoginService = userLoginService;
-		this.modelMapper = modelMapper;
-	}
+	@Autowired
+	PatientRepository patientRepo;
+	UserLoginRepository loginRepo;
+	UserLoginService userLoginService;
+	ModelMapper modelMapper;
 
 	@Override
 	@Transactional

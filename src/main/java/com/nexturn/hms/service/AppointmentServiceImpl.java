@@ -3,6 +3,8 @@ package com.nexturn.hms.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.AppointmentRequestDto;
@@ -24,19 +26,12 @@ import com.nexturn.hms.repository.PatientRepository;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
-	// every appointment is a fixed-length slot; the patient only chooses the start time
 	private static final int SLOT_MINUTES = 30;
-
-	private final AppointmentRepository appointmentRepo;
-	private final PatientRepository patientRepo;
-	private final DoctorRepository doctorRepo;
-
-	public AppointmentServiceImpl(AppointmentRepository appointmentRepo, PatientRepository patientRepo,
-			DoctorRepository doctorRepo) {
-		this.appointmentRepo = appointmentRepo;
-		this.patientRepo = patientRepo;
-		this.doctorRepo = doctorRepo;
-	}
+	
+	@Autowired
+	AppointmentRepository appointmentRepo;
+	PatientRepository patientRepo;
+	DoctorRepository doctorRepo;
 
 	@Override
 	@Transactional

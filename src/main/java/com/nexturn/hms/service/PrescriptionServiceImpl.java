@@ -3,6 +3,7 @@ package com.nexturn.hms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,18 +30,11 @@ import com.nexturn.hms.repository.PrescriptionRepository;
 @Service
 public class PrescriptionServiceImpl implements PrescriptionService {
 
-	private final PrescriptionRepository prescriptionRepo;
-	private final AppointmentRepository appointmentRepo;
-	private final MedicineRepository medicineRepo;
-	private final PatientRepository patientRepo;
-
-	public PrescriptionServiceImpl(PrescriptionRepository prescriptionRepo, AppointmentRepository appointmentRepo,
-			MedicineRepository medicineRepo, PatientRepository patientRepo) {
-		this.prescriptionRepo = prescriptionRepo;
-		this.appointmentRepo = appointmentRepo;
-		this.medicineRepo = medicineRepo;
-		this.patientRepo = patientRepo;
-	}
+	@Autowired
+	PrescriptionRepository prescriptionRepo;
+	AppointmentRepository appointmentRepo;
+	MedicineRepository medicineRepo;
+	PatientRepository patientRepo;
 
 	@Override
 	@Transactional

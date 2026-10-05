@@ -1,9 +1,9 @@
 package com.nexturn.hms.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.nexturn.hms.dto.AddressRequestDto;
 import com.nexturn.hms.dto.AddressResponseDto;
 import com.nexturn.hms.entity.Address;
@@ -16,16 +16,12 @@ import com.nexturn.hms.repository.UserLoginRepository;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-	private final AddressRepository addressRepo;
-	private final UserLoginRepository loginRepo;
-	private final ModelMapper modelMapper;
-
-	public AddressServiceImpl(AddressRepository addressRepo, UserLoginRepository loginRepo,
-			ModelMapper modelMapper) {
-		this.addressRepo = addressRepo;
-		this.loginRepo = loginRepo;
-		this.modelMapper = modelMapper;
-	}
+	
+	
+	@Autowired
+	AddressRepository addressRepo;
+	UserLoginRepository loginRepo;
+	ModelMapper modelMapper;
 
 	@Override
 	@Transactional

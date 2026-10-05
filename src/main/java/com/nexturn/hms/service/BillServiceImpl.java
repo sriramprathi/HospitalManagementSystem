@@ -3,6 +3,8 @@ package com.nexturn.hms.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.BillResponseDto;
@@ -26,18 +28,12 @@ import com.nexturn.hms.repository.PrescriptionRepository;
 @Service
 public class BillServiceImpl implements BillService {
 
-	private final BillRepository billRepo;
-	private final AppointmentRepository appointmentRepo;
-	private final PrescriptionRepository prescriptionRepo;
-	private final PatientRepository patientRepo;
+	@Autowired
+	BillRepository billRepo;
+	AppointmentRepository appointmentRepo;
+	PrescriptionRepository prescriptionRepo;
+	PatientRepository patientRepo;
 
-	public BillServiceImpl(BillRepository billRepo, AppointmentRepository appointmentRepo,
-			PrescriptionRepository prescriptionRepo, PatientRepository patientRepo) {
-		this.billRepo = billRepo;
-		this.appointmentRepo = appointmentRepo;
-		this.prescriptionRepo = prescriptionRepo;
-		this.patientRepo = patientRepo;
-	}
 
 	@Override
 	@Transactional

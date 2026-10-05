@@ -3,6 +3,7 @@ package com.nexturn.hms.service;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexturn.hms.dto.DoctorRegisteredResponseDto;
@@ -20,19 +21,13 @@ import com.nexturn.hms.repository.UserLoginRepository;
 @Service
 public class DoctorServiceImpl implements DoctorService {
 
-	private final DoctorRepository doctorRepo;
-	private final UserLoginRepository loginRepo;
-	private final UserLoginService userLoginService;
-	private final ModelMapper modelMapper;
-
-	public DoctorServiceImpl(DoctorRepository doctorRepo, UserLoginRepository loginRepo,
-			UserLoginService userLoginService, ModelMapper modelMapper) {
-		this.doctorRepo = doctorRepo;
-		this.loginRepo = loginRepo;
-		this.userLoginService = userLoginService;
-		this.modelMapper = modelMapper;
-	}
-
+	
+	@Autowired
+	DoctorRepository doctorRepo;
+	UserLoginRepository loginRepo;
+	UserLoginService userLoginService;
+	ModelMapper modelMapper;
+	
 	@Override
 	@Transactional
 	public DoctorRegisteredResponseDto addDoctor(DoctorRequestDto dto) {

@@ -23,8 +23,11 @@ public class PatientServiceImpl implements PatientService {
 
 	@Autowired
 	PatientRepository patientRepo;
+	@Autowired
 	UserLoginRepository loginRepo;
+	@Autowired
 	UserLoginService userLoginService;
+	@Autowired
 	ModelMapper modelMapper;
 
 	@Override
@@ -87,7 +90,6 @@ public class PatientServiceImpl implements PatientService {
 
 	private PatientResponseDto toResponse(Patient p) {
 		return new PatientResponseDto(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getGender(),
-				p.getDateOfBirth(), p.getPhoneNumber(), p.getBloodType(), p.getEmergencyContact(),
-				p.getPatientType(), p.getLogin().getUserId());
+				p.getDateOfBirth(), p.getPhoneNumber(),  p.getLogin().getUserId());
 	}
 }

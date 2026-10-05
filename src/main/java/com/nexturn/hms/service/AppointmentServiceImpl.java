@@ -30,7 +30,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	
 	@Autowired
 	AppointmentRepository appointmentRepo;
+	@Autowired
 	PatientRepository patientRepo;
+	@Autowired
 	DoctorRepository doctorRepo;
 
 	@Override

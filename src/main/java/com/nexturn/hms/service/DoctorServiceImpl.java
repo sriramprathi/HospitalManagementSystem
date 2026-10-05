@@ -24,8 +24,11 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	@Autowired
 	DoctorRepository doctorRepo;
+	@Autowired
 	UserLoginRepository loginRepo;
+	@Autowired
 	UserLoginService userLoginService;
+	@Autowired
 	ModelMapper modelMapper;
 	
 	@Override

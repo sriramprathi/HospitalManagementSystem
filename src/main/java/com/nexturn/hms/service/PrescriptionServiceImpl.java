@@ -32,8 +32,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 	@Autowired
 	PrescriptionRepository prescriptionRepo;
+	@Autowired
 	AppointmentRepository appointmentRepo;
+	@Autowired
 	MedicineRepository medicineRepo;
+	@Autowired
 	PatientRepository patientRepo;
 
 	@Override

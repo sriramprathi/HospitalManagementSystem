@@ -13,5 +13,4 @@ public record MedicineRequestDto(
 		@NotNull @Positive BigDecimal price,
 		@PositiveOrZero int availability,
 		@NotNull MedicineCategory category) {
-
 }

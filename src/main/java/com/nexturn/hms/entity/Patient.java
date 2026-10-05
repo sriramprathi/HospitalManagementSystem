@@ -33,14 +33,6 @@ public class Patient {
 	private LocalDate dateOfBirth;
 	@Column(length=15,nullable=false)
 	private String phoneNumber;
-	@Enumerated(EnumType.STRING)
-	@Column(length=15,nullable=false)
-	private Blood bloodType;
-	@Column(length=15,nullable=false)
-	private String emergencyContact;
-	@Enumerated(EnumType.STRING)
-	@Column(length=15,nullable=false)
-	private PatientType patientType;
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private UserLogin login;
@@ -84,24 +76,6 @@ public class Patient {
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-	public Blood getBloodType() {
-		return bloodType;
-	}
-	public void setBloodType(Blood bloodType) {
-		this.bloodType = bloodType;
-	}
-	public String getEmergencyContact() {
-		return emergencyContact;
-	}
-	public void setEmergencyContact(String emergencyContact) {
-		this.emergencyContact = emergencyContact;
-	}
-	public PatientType getPatientType() {
-		return patientType;
-	}
-	public void setPatientType(PatientType patientType) {
-		this.patientType = patientType;
 	}
 	public UserLogin getLogin() {
 		return login;

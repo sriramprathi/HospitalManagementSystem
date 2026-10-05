@@ -15,12 +15,12 @@ import com.nexturn.hms.repository.UserLoginRepository;
 
 @Service
 public class AddressServiceImpl implements AddressService {
-
-	
 	
 	@Autowired
 	AddressRepository addressRepo;
+	@Autowired
 	UserLoginRepository loginRepo;
+	@Autowired
 	ModelMapper modelMapper;
 
 	@Override
@@ -36,7 +36,6 @@ public class AddressServiceImpl implements AddressService {
 			a.setLogin(login);
 			return a;
 		});
-
 		modelMapper.map(dto, address);
 		return toResponse(addressRepo.save(address));
 	}

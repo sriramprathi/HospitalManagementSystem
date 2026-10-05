@@ -23,6 +23,7 @@ public class UserLoginServiceImpl implements UserLoginService{
 
 	@Autowired
 	UserLoginRepository repo;
+	@Autowired
 	SecureRandom random = new SecureRandom();
 
 	@Override

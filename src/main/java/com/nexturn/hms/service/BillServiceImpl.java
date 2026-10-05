@@ -30,8 +30,11 @@ public class BillServiceImpl implements BillService {
 
 	@Autowired
 	BillRepository billRepo;
+	@Autowired
 	AppointmentRepository appointmentRepo;
+	@Autowired
 	PrescriptionRepository prescriptionRepo;
+	@Autowired
 	PatientRepository patientRepo;
 
 

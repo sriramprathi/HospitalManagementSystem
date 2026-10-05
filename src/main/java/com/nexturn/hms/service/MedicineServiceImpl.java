@@ -20,6 +20,7 @@ public class MedicineServiceImpl implements MedicineService {
 
 	@Autowired
 	MedicineRepository medicineRepo;
+	@Autowired
 	ModelMapper modelMapper;
 
 	@Override

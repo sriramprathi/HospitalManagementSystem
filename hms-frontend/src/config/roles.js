@@ -7,6 +7,7 @@ export const PATHS = {
   medicines: "/medicines",
   prescriptions: "/prescriptions",
   bills: "/bills",
+  profile: "/profile",
 };
 
 const dashboard = { label: "Dashboard", path: PATHS.dashboard, icon: "bi-speedometer2" };
@@ -17,22 +18,24 @@ const book = { label: "Book Appointment", path: PATHS.bookAppointment, icon: "bi
 const medicines = { label: "Medicines", path: PATHS.medicines, icon: "bi-capsule" };
 const prescriptions = { label: "Prescriptions", path: PATHS.prescriptions, icon: "bi-file-medical" };
 const bills = { label: "Bills", path: PATHS.bills, icon: "bi-receipt" };
+const profile = { label: "My Profile", path: PATHS.profile, icon: "bi-person-circle" };
 
-// Role names must match the backend Role enum exactly
+// Role names must match the backend Role enum exactly.
 export const ROLES = {
-  Administrator: { menu: [dashboard, patients, doctors, appointments, medicines, prescriptions, bills] },
-  Doctor: { menu: [dashboard, appointments, prescriptions, patients] },
-  Patient: {
+  ADMINISTRATOR: { menu: [dashboard, patients, doctors, appointments, medicines, prescriptions, bills] },
+  DOCTOR: { menu: [dashboard, appointments, prescriptions, patients, profile] },
+  PATIENT: {
     menu: [
       dashboard,
       book,
       { ...appointments, label: "My Appointments" },
       { ...prescriptions, label: "My Prescriptions" },
       { ...bills, label: "My Bills" },
+      profile,
     ],
   },
-  Pharmacist: { menu: [dashboard, medicines, prescriptions] },
-  Receptionist: { menu: [dashboard, patients, appointments, book, bills] },
+  PHARMACIST: { menu: [dashboard, medicines, prescriptions] },
+  RECEPTIONIST: { menu: [dashboard, patients, appointments, book, bills] },
 };
 
 export function canAccess(role, path) {

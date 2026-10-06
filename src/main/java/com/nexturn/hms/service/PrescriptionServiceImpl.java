@@ -45,7 +45,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		Appointment appointment = appointmentRepo.findById(appointmentId)
 				.orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with id: " + appointmentId));
 
-		if (appointment.getStatus() == AppointmentStatus.Cancelled) {
+		if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
 			throw new InvalidPrescriptionException("Cannot create a prescription for a cancelled appointment");
 		}
 		// one prescription per appointment

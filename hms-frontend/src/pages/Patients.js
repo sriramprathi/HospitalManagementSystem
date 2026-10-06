@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import Field from "../components/Field";
 import { addPatient, deletePatient, getAllPatients, updatePatient } from "../services/ApiService";
-import { BLOOD_TYPES, bloodLabel, GENDERS, PATIENT_TYPES, todayStr } from "../config/constants";
+import { GENDERS, todayStr } from "../config/constants";
 
 const EMPTY = {
   firstName: "",
@@ -13,15 +13,11 @@ const EMPTY = {
   gender: "Male",
   dateOfBirth: "",
   phoneNumber: "",
-  bloodType: "A_POSITIVE",
-  emergencyContact: "",
-  patientType: "Outpatient",
 };
 
 export default function Patients() {
   const { user } = useAuth();
   const canEdit = user.role === "Administrator" || user.role === "Receptionist";
-  const canAdd = user.role === "Receptionist"; // administrators can edit and delete, but not add
   const canDelete = user.role === "Administrator";
 
   const { data, loading, error, reload } = useApi(getAllPatients);
@@ -92,7 +88,7 @@ export default function Patients() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {canAdd && (
+          {canEdit && (
             <button className="btn btn-primary text-nowrap" onClick={openAdd}>
               <i className="bi bi-plus-lg me-1"></i>Add
             </button>
@@ -111,7 +107,6 @@ export default function Patients() {
               <thead className="table-light">
                 <tr>
                   <th>ID</th><th>Name</th><th>Gender</th><th>DOB</th><th>Phone</th>
-                  <th>Blood</th><th>Type</th><th>Emergency</th>
                   {canEdit && <th className="text-end">Actions</th>}
                 </tr>
               </thead>
@@ -123,9 +118,6 @@ export default function Patients() {
                     <td>{p.gender}</td>
                     <td>{p.dateOfBirth}</td>
                     <td>{p.phoneNumber}</td>
-                    <td>{bloodLabel(p.bloodType)}</td>
-                    <td><span className="badge text-bg-info">{p.patientType}</span></td>
-                    <td>{p.emergencyContact}</td>
                     {canEdit && (
                       <td className="text-end text-nowrap">
                         <button className="btn btn-sm btn-outline-primary me-1" onClick={() => openEdit(p)}>
@@ -141,7 +133,7 @@ export default function Patients() {
                   </tr>
                 ))}
                 {patients.length === 0 && (
-                  <tr><td colSpan="9" className="text-center text-muted py-4">No patients found</td></tr>
+                  <tr><td colSpan="6" className="text-center text-muted py-4">No patients found</td></tr>
                 )}
               </tbody>
             </table>
@@ -164,17 +156,6 @@ export default function Patients() {
                 <input type="date" max={todayStr()} className="form-control" value={form.values.dateOfBirth} onChange={set("dateOfBirth")} required />
               </Field>
               <Field label="Phone"><input className="form-control" value={form.values.phoneNumber} onChange={set("phoneNumber")} required /></Field>
-              <Field label="Emergency contact"><input className="form-control" value={form.values.emergencyContact} onChange={set("emergencyContact")} required /></Field>
-              <Field label="Blood type">
-                <select className="form-select" value={form.values.bloodType} onChange={set("bloodType")}>
-                  {BLOOD_TYPES.map((b) => <option key={b} value={b}>{bloodLabel(b)}</option>)}
-                </select>
-              </Field>
-              <Field label="Patient type">
-                <select className="form-select" value={form.values.patientType} onChange={set("patientType")}>
-                  {PATIENT_TYPES.map((t) => <option key={t}>{t}</option>)}
-                </select>
-              </Field>
             </div>
             {formError && <div className="alert alert-danger mt-3 mb-0">{formError}</div>}
             <div className="d-flex justify-content-end gap-2 mt-3">

@@ -149,3 +149,7 @@ a.stat-card:hover { box-shadow: 0 4px 14px rgba(16, 24, 40, 0.1) !important; col
 /* hide the browser's built-in password reveal icon (Edge) */
 input::-ms-reveal,
 input::-ms-clear { display: none; }
+
+.password-toggle {
+  min-width: 46px;
+}

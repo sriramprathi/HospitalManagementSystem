@@ -43,7 +43,7 @@ public class BillServiceImpl implements BillService {
 	public BillResponseDto generateConsultationBill(int appointmentId) {
 		Appointment appointment = appointmentRepo.findById(appointmentId)
 				.orElseThrow(() -> new AppointmentNotFoundException("Appointment not found with id: " + appointmentId));
-		if (appointment.getStatus() == AppointmentStatus.Cancelled) {
+		if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
 			throw new InvalidBillException("Cannot generate a bill for a cancelled appointment");
 		}
 		// the amount is the doctor's consultation fee

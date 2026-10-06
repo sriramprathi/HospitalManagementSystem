@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import Field from "../components/Field";
 import { canAccess, PATHS } from "../config/roles";
-import { hhmm, STATUS_COLOR, todayStr } from "../config/constants";
+import { hhmm, STATUS_COLOR, STATUS, statusLabel, todayStr } from "../config/constants";
 import {
   cancelAppointment,
   getAppointmentsByDate,
@@ -19,9 +19,9 @@ import {
 export default function Appointments() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isDoctor = user.role === "Doctor";
-  const isPatient = user.role === "Patient";
-  const canComplete = isDoctor || user.role === "Administrator";
+  const isDoctor = user.role === "DOCTOR";
+  const isPatient = user.role === "PATIENT";
+  const canComplete = isDoctor || user.role === "ADMINISTRATOR";
   const canSeePrescriptions = canAccess(user.role, PATHS.prescriptions);
 
   const [date, setDate] = useState(todayStr()); // used by Administrator / Receptionist
@@ -75,15 +75,13 @@ export default function Appointments() {
           )}
           <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="">All statuses</option>
-            <option>Scheduled</option>
-            <option>Completed</option>
-            <option>Cancelled</option>
+            {STATUS.map((status) => <option key={status} value={status}>{statusLabel(status)}</option>)}
           </select>
         </div>
       </div>
 
       {(isDoctor || isPatient) && !user.profileId && (
-        <div className="alert alert-warning">No {user.role.toLowerCase()} profile is linked to this login.</div>
+        <div className="alert alert-warning">No {user.role === "PATIENT" ? "patient" : "doctor"} profile is linked to this login.</div>
       )}
       {error && <div className="alert alert-danger">{error}</div>}
       {actionError && <div className="alert alert-danger">{actionError}</div>}
@@ -111,20 +109,22 @@ export default function Appointments() {
                     {!isPatient && <td>{a.patientName ?? a.patientId}</td>}
                     {!isDoctor && <td>{a.doctorName ?? a.doctorId}</td>}
                     <td>{a.disease}</td>
-                    <td><span className={`badge text-bg-${STATUS_COLOR[a.status] || "secondary"}`}>{a.status}</span></td>
+                    <td><span className={`badge text-bg-${STATUS_COLOR[a.status] || "secondary"}`}>{statusLabel(a.status)}</span></td>
                     <td className="text-end text-nowrap">
-                      {a.status === "Scheduled" && (
+                      {a.status === "SCHEDULED" && (
                         <>
                           {canComplete && (
                             <button
+                              type="button"
                               className="btn btn-sm btn-outline-success me-1"
                               title="Mark completed"
-                              onClick={() => run(() => updateAppointmentStatus(a.appointmentId, "Completed"))}
+                              onClick={() => run(() => updateAppointmentStatus(a.appointmentId, "COMPLETED"))}
                             >
                               <i className="bi bi-check2"></i>
                             </button>
                           )}
                           <button
+                            type="button"
                             className="btn btn-sm btn-outline-primary me-1"
                             title="Reschedule"
                             onClick={() => {
@@ -134,13 +134,14 @@ export default function Appointments() {
                           >
                             <i className="bi bi-calendar2-week"></i>
                           </button>
-                          <button className="btn btn-sm btn-outline-danger me-1" title="Cancel" onClick={() => cancel(a)}>
+                          <button type="button" className="btn btn-sm btn-outline-danger me-1" title="Cancel" onClick={() => cancel(a)}>
                             <i className="bi bi-x-lg"></i>
                           </button>
                         </>
                       )}
-                      {canSeePrescriptions && a.status !== "Cancelled" && (
+                      {canSeePrescriptions && a.status !== "CANCELLED" && (
                         <button
+                          type="button"
                           className="btn btn-sm btn-outline-secondary"
                           title="Prescription"
                           onClick={() => navigate(`${PATHS.prescriptions}?appointmentId=${a.appointmentId}`)}

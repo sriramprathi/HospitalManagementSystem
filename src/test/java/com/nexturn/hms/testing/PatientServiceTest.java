@@ -54,7 +54,7 @@ class PatientServiceTest {
 	void testRegisterPatientCreatesPatientLogin() {
 		PatientRegisteredResponseDto result = patientService.registerPatient(patientDto());
 		LoginResponseDto login = userLoginService.verifyLogin(new LoginRequestDto(result.userName(), result.password()));
-		assertEquals(Role.Patient, login.role());
+		assertEquals(Role.PATIENT, login.role());
 	}
 
 	@Test
@@ -99,7 +99,12 @@ class PatientServiceTest {
 
 	@Test
 	void testUpdateInvalidPatient() {
-		assertThrows(PatientNotFoundException.class, () -> patientService.updatePatient(99999, patientDto()));
+	    PatientRequestDto request = patientDto();
+
+	    assertThrows(
+	            PatientNotFoundException.class,
+	            () -> patientService.updatePatient(99999, request)
+	    );
 	}
 
 	@Test

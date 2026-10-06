@@ -53,7 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		appointment.setStartTime(dto.startTime());
 		appointment.setEndTime(endTime);
 		appointment.setDisease(dto.disease());
-		appointment.setStatus(AppointmentStatus.Scheduled);
+		appointment.setStatus(AppointmentStatus.SCHEDULED);
 
 		return toResponse(appointmentRepo.save(appointment));
 	}
@@ -64,7 +64,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		Appointment appointment = findAppointment(appointmentId);
 		requireBooked(appointment, "cancelled");
 		// the row is kept with status Cancelled so the history is not lost
-		appointment.setStatus(AppointmentStatus.Cancelled);
+		appointment.setStatus(AppointmentStatus.CANCELLED);
 		return toResponse(appointmentRepo.save(appointment));
 	}
 
@@ -132,7 +132,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	// only an appointment that is still Scheduled can be cancelled, rescheduled or updated
 	private void requireBooked(Appointment appointment, String action) {
-		if (appointment.getStatus() != AppointmentStatus.Scheduled) {
+		if (appointment.getStatus() != AppointmentStatus.SCHEDULED) {
 			throw new InvalidAppointmentException(
 					"Appointment cannot be " + action + " because its status is " + appointment.getStatus());
 		}
@@ -152,7 +152,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	private void checkSlotFree(int doctorId, LocalDate date, LocalTime start, LocalTime end, int excludeId) {
-		if (appointmentRepo.existsOverlap(doctorId, date, start, end, AppointmentStatus.Cancelled, excludeId)) {
+		if (appointmentRepo.existsOverlap(doctorId, date, start, end, AppointmentStatus.CANCELLED, excludeId)) {
 			throw new SlotNotAvailableException("The doctor already has an appointment at this time");
 		}
 	}

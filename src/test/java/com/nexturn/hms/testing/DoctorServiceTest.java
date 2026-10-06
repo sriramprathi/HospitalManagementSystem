@@ -35,7 +35,7 @@ class DoctorServiceTest {
 	private EntityManager entityManager;
 
 	private DoctorRequestDto doctorDto() {
-		return new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MBBS", "9999999999",
+		return new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MBBS", "9999999999",
 				new BigDecimal("500.00"));
 	}
 
@@ -55,7 +55,7 @@ class DoctorServiceTest {
 	void testAddDoctorCreatesDoctorLogin() {
 		DoctorRegisteredResponseDto result = doctorService.addDoctor(doctorDto());
 		LoginResponseDto login = userLoginService.verifyLogin(new LoginRequestDto(result.userName(), result.password()));
-		assertEquals(Role.Doctor, login.role());
+		assertEquals(Role.DOCTOR, login.role());
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class DoctorServiceTest {
 		DoctorResponseDto result = doctorService.getDoctorById(doctorId);
 		assertEquals(doctorId, result.doctorId());
 		assertEquals("Test", result.firstName());
-		assertEquals(Department.Cardiology, result.department());
+		assertEquals(Department.CARDIOLOGY, result.department());
 		assertEquals(500.0, result.consultationFee().doubleValue());
 	}
 
@@ -96,15 +96,15 @@ class DoctorServiceTest {
 	@Test
 	void testGetDoctorsByDepartment() {
 		addDoctor();
-		List<DoctorResponseDto> result = doctorService.getDoctorsByDepartment(Department.Cardiology);
+		List<DoctorResponseDto> result = doctorService.getDoctorsByDepartment(Department.CARDIOLOGY);
 		assertFalse(result.isEmpty());
-		assertEquals(Department.Cardiology, result.get(0).department());
+		assertEquals(Department.CARDIOLOGY, result.get(0).department());
 	}
 
 	@Test
 	void testUpdateDoctor() {
 		int doctorId = addDoctor();
-		DoctorRequestDto updateDto = new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MD", "8888888888",
+		DoctorRequestDto updateDto = new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MD", "8888888888",
 				new BigDecimal("700.00"));
 		DoctorResponseDto result = doctorService.updateDoctor(doctorId, updateDto);
 		assertEquals(doctorId, result.doctorId());
@@ -115,9 +115,13 @@ class DoctorServiceTest {
 
 	@Test
 	void testUpdateInvalidDoctor() {
-		assertThrows(DoctorNotFoundException.class, () -> doctorService.updateDoctor(99999, doctorDto()));
-	}
+	    DoctorRequestDto request = doctorDto();
 
+	    assertThrows(
+	            DoctorNotFoundException.class,
+	            () -> doctorService.updateDoctor(99999, request)
+	    );
+	}
 	@Test
 	void testDeleteDoctor() {
 		int doctorId = addDoctor();

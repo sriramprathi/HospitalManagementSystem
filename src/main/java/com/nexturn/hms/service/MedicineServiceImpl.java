@@ -2,7 +2,6 @@ package com.nexturn.hms.service;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +19,7 @@ public class MedicineServiceImpl implements MedicineService {
 
 	@Autowired
 	MedicineRepository medicineRepo;
-	@Autowired
-	ModelMapper modelMapper;
-
+	
 	@Override
 	@Transactional
 	public MedicineResponseDto addMedicine(MedicineRequestDto dto) {
@@ -85,9 +82,10 @@ public class MedicineServiceImpl implements MedicineService {
 	}
 
 	private void applyDetails(Medicine medicine, MedicineRequestDto dto) {
-		modelMapper.map(dto, medicine);
-		// the mapper copies the name as sent, so remove stray spaces afterwards
-		medicine.setMedicineName(medicine.getMedicineName().trim());
+	    medicine.setMedicineName(dto.medicineName().trim());
+	    medicine.setPrice(dto.price());
+	    medicine.setAvailability(dto.availability());
+	    medicine.setCategory(dto.category());
 	}
 
 	private MedicineResponseDto toResponse(Medicine m) {

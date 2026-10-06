@@ -55,7 +55,7 @@ class PrescriptionServiceTest{
 	}
 
 	private int createDoctor() {
-		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MBBS", "9999999999",
+		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MBBS", "9999999999",
 				new BigDecimal("500.00"));
 		return doctorService.addDoctor(dto).doctorId();
 	}
@@ -110,11 +110,17 @@ class PrescriptionServiceTest{
 
 	@Test
 	void testCreatePrescriptionForCancelledAppointment() {
-		int appointmentId = bookAppointment(createPatient(), createDoctor());
-		int medicineId = createMedicine(100);
-		appointmentService.cancelAppointment(appointmentId);
-		assertThrows(InvalidPrescriptionException.class,
-				() -> prescriptionService.createPrescription(appointmentId, prescriptionDto(medicineId)));
+	    int appointmentId = bookAppointment(createPatient(), createDoctor());
+	    int medicineId = createMedicine(100);
+
+	    appointmentService.cancelAppointment(appointmentId);
+
+	    PrescriptionRequestDto request = prescriptionDto(medicineId);
+
+	    assertThrows(
+	            InvalidPrescriptionException.class,
+	            () -> prescriptionService.createPrescription(appointmentId, request)
+	    );
 	}
 
 	@Test

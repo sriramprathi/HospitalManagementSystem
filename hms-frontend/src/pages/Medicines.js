@@ -15,9 +15,9 @@ const categoryLabel = (c) => (c ? c.charAt(0) + c.slice(1).toLowerCase() : "");
 export default function Medicines() {
   const { user } = useAuth();
   // who can do what (change these three lines to adjust)
-  const canAdd = user.role === "Pharmacist";
-  const canEdit = user.role === "Administrator" || user.role === "Pharmacist";
-  const canDelete = user.role === "Administrator";
+  const canAdd = user.role === "PHARMACIST";
+  const canEdit = user.role === "ADMINISTRATOR" || user.role === "PHARMACIST";
+  const canDelete = user.role === "ADMINISTRATOR";
 
   const { data, loading, error, reload } = useApi(getAllMedicines);
   const [search, setSearch] = useState("");
@@ -161,7 +161,7 @@ export default function Medicines() {
         <Modal title={form.id ? "Edit medicine" : "Add medicine"} onClose={() => setForm(null)}>
           <form onSubmit={save}>
             <div className="row g-3">
-              <Field label="Medicine name" col="col-12">
+              <Field label="Medicine name" col="col-12" required>
                 <input
                   className="form-control"
                   maxLength={40}
@@ -170,12 +170,12 @@ export default function Medicines() {
                   required
                 />
               </Field>
-              <Field label="Category">
+              <Field label="Category" required>
                 <select className="form-select" value={form.values.category} onChange={set("category")}>
                   {MEDICINE_CATEGORIES.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
                 </select>
               </Field>
-              <Field label="Price (₹)">
+              <Field label="Price (₹)" required>
                 <input
                   type="number"
                   min="0.01"
@@ -186,7 +186,7 @@ export default function Medicines() {
                   required
                 />
               </Field>
-              <Field label="Available quantity">
+              <Field label="Available quantity" required>
                 <input
                   type="number"
                   min="0"

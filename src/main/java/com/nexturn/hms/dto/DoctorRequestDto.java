@@ -15,7 +15,8 @@ public record DoctorRequestDto(
 		@NotBlank @Pattern(regexp = "^[A-Za-z]+$", message = "Last name must contain letters only") String lastName,
 		@NotNull Department department,
 		@NotBlank @Size(max = 50) String qualification,
-		@NotBlank @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits") String phoneNumber,
+		@NotBlank
+		@Pattern( regexp = "^\\d{10}$", message = "Phone number must be 10 digits")String phoneNumber,
 		@NotNull @Positive BigDecimal consultationFee) {
 
 }

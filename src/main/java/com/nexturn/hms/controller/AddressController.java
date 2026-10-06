@@ -1,6 +1,7 @@
 package com.nexturn.hms.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users/{userId}/address")
+@CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class AddressController {
 
 	private final AddressService addressService;

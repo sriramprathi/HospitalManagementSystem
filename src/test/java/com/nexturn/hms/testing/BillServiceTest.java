@@ -60,7 +60,7 @@ class BillServiceTest {
 	}
 
 	private int createDoctor() {
-		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MBBS", "9999999999",
+		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MBBS", "9999999999",
 				new BigDecimal("500.00"));
 		return doctorService.addDoctor(dto).doctorId();
 	}
@@ -161,11 +161,17 @@ class BillServiceTest {
 
 	@Test
 	void testUpdateStatusOfPaidBill() {
-		int appointmentId = bookAppointment(createPatient(), createDoctor());
-		BillResponseDto generated = billService.generateConsultationBill(appointmentId);
-		billService.updateStatus(generated.billId(), BillStatus.PAID);
-		assertThrows(InvalidBillException.class,
-				() -> billService.updateStatus(generated.billId(), BillStatus.CANCELLED));
+	    int appointmentId = bookAppointment(createPatient(), createDoctor());
+	    BillResponseDto generated = billService.generateConsultationBill(appointmentId);
+
+	    billService.updateStatus(generated.billId(), BillStatus.PAID);
+
+	    BillStatus cancelledStatus = BillStatus.CANCELLED;
+
+	    assertThrows(
+	            InvalidBillException.class,
+	            () -> billService.updateStatus(generated.billId(), cancelledStatus)
+	    );
 	}
 
 	@Test

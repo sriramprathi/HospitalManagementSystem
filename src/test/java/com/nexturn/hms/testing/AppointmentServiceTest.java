@@ -47,7 +47,7 @@ class AppointmentServiceTest {
 	}
 
 	private int createDoctor() {
-		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MBBS", "9999999999",
+		DoctorRequestDto dto = new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MBBS", "9999999999",
 				new BigDecimal("500.00"));
 		return doctorService.addDoctor(dto).doctorId();
 	}
@@ -63,7 +63,7 @@ class AppointmentServiceTest {
 		int doctorId = createDoctor();
 		AppointmentResponseDto result = book(patientId, doctorId, LocalTime.of(10, 0));
 		assertTrue(result.appointmentId() > 0);
-		assertEquals(AppointmentStatus.Scheduled, result.status());
+		assertEquals(AppointmentStatus.SCHEDULED, result.status());
 		assertEquals(patientId, result.patientId());
 		assertEquals(doctorId, result.doctorId());
 		assertEquals(LocalTime.of(10, 0), result.startTime());
@@ -124,7 +124,7 @@ class AppointmentServiceTest {
 	void testCancelAppointment() {
 		AppointmentResponseDto booked = book(createPatient(), createDoctor(), LocalTime.of(10, 0));
 		AppointmentResponseDto result = appointmentService.cancelAppointment(booked.appointmentId());
-		assertEquals(AppointmentStatus.Cancelled, result.status());
+		assertEquals(AppointmentStatus.CANCELLED, result.status());
 	}
 
 	@Test
@@ -142,7 +142,7 @@ class AppointmentServiceTest {
 		AppointmentResponseDto booked = book(patientId, doctorId, LocalTime.of(10, 0));
 		appointmentService.cancelAppointment(booked.appointmentId());
 		AppointmentResponseDto result = book(patientId, doctorId, LocalTime.of(10, 0));
-		assertEquals(AppointmentStatus.Scheduled, result.status());
+		assertEquals(AppointmentStatus.SCHEDULED, result.status());
 	}
 
 	@Test
@@ -168,14 +168,19 @@ class AppointmentServiceTest {
 
 	@Test
 	void testRescheduleIntoBookedSlot() {
-		int patientId = createPatient();
-		int doctorId = createDoctor();
-		book(patientId, doctorId, LocalTime.of(10, 0));
-		AppointmentResponseDto second = book(patientId, doctorId, LocalTime.of(11, 0));
-		LocalDate tomorrow = LocalDate.now().plusDays(1);
+	    int patientId = createPatient();
+	    int doctorId = createDoctor();
 
-		assertThrows(SlotNotAvailableException.class, () -> appointmentService
-				.rescheduleAppointment(second.appointmentId(), new RescheduleRequestDto(tomorrow, LocalTime.of(10, 0))));
+	    book(patientId, doctorId, LocalTime.of(10, 0));
+	    AppointmentResponseDto second = book(patientId, doctorId, LocalTime.of(11, 0));
+	    LocalDate tomorrow = LocalDate.now().plusDays(1);
+	    int appointmentId = second.appointmentId();
+	    RescheduleRequestDto request =
+	            new RescheduleRequestDto(tomorrow, LocalTime.of(10, 0));
+	    assertThrows(
+	            SlotNotAvailableException.class,
+	            () -> appointmentService.rescheduleAppointment(appointmentId, request)
+	    );
 	}
 
 	@Test
@@ -192,16 +197,16 @@ class AppointmentServiceTest {
 	void testUpdateStatus() {
 		AppointmentResponseDto booked = book(createPatient(), createDoctor(), LocalTime.of(10, 0));
 		AppointmentResponseDto result = appointmentService.updateStatus(booked.appointmentId(),
-				AppointmentStatus.Completed);
-		assertEquals(AppointmentStatus.Completed, result.status());
+				AppointmentStatus.COMPLETED);
+		assertEquals(AppointmentStatus.COMPLETED, result.status());
 	}
 
 	@Test
 	void testUpdateStatusOfCompletedAppointment() {
 		AppointmentResponseDto booked = book(createPatient(), createDoctor(), LocalTime.of(10, 0));
-		appointmentService.updateStatus(booked.appointmentId(), AppointmentStatus.Completed);
+		appointmentService.updateStatus(booked.appointmentId(), AppointmentStatus.COMPLETED);
 		assertThrows(InvalidAppointmentException.class,
-				() -> appointmentService.updateStatus(booked.appointmentId(), AppointmentStatus.Cancelled));
+				() -> appointmentService.updateStatus(booked.appointmentId(), AppointmentStatus.CANCELLED));
 	}
 
 	@Test

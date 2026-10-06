@@ -1,12 +1,9 @@
 package com.nexturn.hms.service;
 
 import java.util.List;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.nexturn.hms.dto.NewUserRequestDto;
 import com.nexturn.hms.dto.PatientRegisteredResponseDto;
 import com.nexturn.hms.dto.PatientRequestDto;
@@ -27,15 +24,13 @@ public class PatientServiceImpl implements PatientService {
 	UserLoginRepository loginRepo;
 	@Autowired
 	UserLoginService userLoginService;
-	@Autowired
-	ModelMapper modelMapper;
-
+	
 	@Override
 	@Transactional
 	public PatientRegisteredResponseDto registerPatient(PatientRequestDto dto) {
 		// 1. create the login first (role is always PATIENT, never taken from the request)
 		UserCredentialsResponseDto creds = userLoginService
-				.registerNewUser(new NewUserRequestDto(dto.firstName(), dto.lastName(), Role.Patient));
+				.registerNewUser(new NewUserRequestDto(dto.firstName(), dto.lastName(), Role.PATIENT));
 
 		// 2. save the patient linked to that login
 		Patient patient = new Patient();
@@ -84,10 +79,14 @@ public class PatientServiceImpl implements PatientService {
 				.orElseThrow(() -> new PatientNotFoundException("Patient not found with id: " + patientId));
 	}
 
+	
 	private void applyDetails(Patient patient, PatientRequestDto dto) {
-		modelMapper.map(dto, patient);
+	    patient.setFirstName(dto.firstName());
+	    patient.setLastName(dto.lastName());
+	    patient.setGender(dto.gender());
+	    patient.setDateOfBirth(dto.dateOfBirth());
+	    patient.setPhoneNumber(dto.phoneNumber());
 	}
-
 	private PatientResponseDto toResponse(Patient p) {
 		return new PatientResponseDto(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getGender(),
 				p.getDateOfBirth(), p.getPhoneNumber(),  p.getLogin().getUserId());

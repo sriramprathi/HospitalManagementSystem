@@ -29,7 +29,7 @@ class UserLoginServiceTest {
 	@Autowired
 	private UserLoginService userLoginService;
 	private UserCredentialsResponseDto registerUser() {
-		NewUserRequestDto dto = new NewUserRequestDto("Test", "User", Role.Patient);
+		NewUserRequestDto dto = new NewUserRequestDto("Test", "User", Role.PATIENT);
 		return userLoginService.registerNewUser(dto);
 	}
 	@Test
@@ -53,7 +53,7 @@ class UserLoginServiceTest {
 		UserCredentialsResponseDto user = registerUser();
 		LoginResponseDto result = userLoginService.verifyLogin(new LoginRequestDto(user.userName(), user.password()));
 		assertEquals(user.userId(), result.userId());
-		assertEquals(Role.Patient, result.role());
+		assertEquals(Role.PATIENT, result.role());
 	}
 
 	@Test
@@ -65,18 +65,37 @@ class UserLoginServiceTest {
 
 	@Test
 	void testVerifyLoginWithUnknownUser() {
-		assertThrows(InvalidCredentialsException.class,
-				() -> userLoginService.verifyLogin(new LoginRequestDto("no.such.user@0000", "Any@123")));
+	    LoginRequestDto request =
+	            new LoginRequestDto("no.such.user@0000", "Any@123");
+
+	    assertThrows(
+	            InvalidCredentialsException.class,
+	            () -> userLoginService.verifyLogin(request)
+	    );
 	}
 
 	@Test
 	void testChangePassword() {
-		UserCredentialsResponseDto user = registerUser();
-		userLoginService.changePassword(user.userId(), new ChangePasswordDto(user.password(), "NewPass@5678"));
-		LoginResponseDto result = userLoginService.verifyLogin(new LoginRequestDto(user.userName(), "NewPass@5678"));
-		assertEquals(user.userId(), result.userId());
-		assertThrows(InvalidCredentialsException.class,
-				() -> userLoginService.verifyLogin(new LoginRequestDto(user.userName(), user.password())));
+	    UserCredentialsResponseDto user = registerUser();
+
+	    userLoginService.changePassword(
+	            user.userId(),
+	            new ChangePasswordDto(user.password(), "NewPass@5678")
+	    );
+
+	    LoginResponseDto result = userLoginService.verifyLogin(
+	            new LoginRequestDto(user.userName(), "NewPass@5678")
+	    );
+
+	    assertEquals(user.userId(), result.userId());
+
+	    LoginRequestDto oldPasswordRequest =
+	            new LoginRequestDto(user.userName(), user.password());
+
+	    assertThrows(
+	            InvalidCredentialsException.class,
+	            () -> userLoginService.verifyLogin(oldPasswordRequest)
+	    );
 	}
 
 	@Test
@@ -108,7 +127,7 @@ class UserLoginServiceTest {
 	@Test
 	void testGetUsersByRole() {
 		registerUser();
-		List<UsersByRoleResponseDto> result = userLoginService.getUsersByRole(Role.Patient);
+		List<UsersByRoleResponseDto> result = userLoginService.getUsersByRole(Role.PATIENT);
 		assertFalse(result.isEmpty());
 	}
 }

@@ -25,7 +25,7 @@ class AddressServiceTest {
 	private UserLoginService userLoginService;
 
 	private int createUser() {
-		return userLoginService.registerNewUser(new NewUserRequestDto("Test", "User", Role.Patient)).userId();
+		return userLoginService.registerNewUser(new NewUserRequestDto("Test", "User", Role.PATIENT)).userId();
 	}
 
 	@Test
@@ -53,10 +53,14 @@ class AddressServiceTest {
 
 	@Test
 	void testSaveAddressForUnknownUser() {
-		assertThrows(UserNotFoundException.class, () -> addressService.saveOrUpdateAddress(99999,
-				new AddressRequestDto("Main Street", "Hyderabad", "Telangana")));
-	}
+	    AddressRequestDto request =
+	            new AddressRequestDto("Main Street", "Hyderabad", "Telangana");
 
+	    assertThrows(
+	            UserNotFoundException.class,
+	            () -> addressService.saveOrUpdateAddress(99999, request)
+	    );
+	}
 	@Test
 	void testGetAddressByUserId() {
 		int userId = createUser();

@@ -4,12 +4,12 @@ import { useAuth } from "../context/AuthContext";
 import useApi from "../hooks/useApi";
 import Field from "../components/Field";
 import { PATHS } from "../config/roles";
-import { DEPARTMENTS, todayStr } from "../config/constants";
+import { DEPARTMENTS, departmentLabel, todayStr } from "../config/constants";
 import { bookAppointment, getAllDoctors, getDoctorsByDepartment } from "../services/ApiService";
 
 export default function BookAppointment() {
   const { user } = useAuth();
-  const isPatient = user.role === "Patient";
+  const isPatient = user.role === "PATIENT";
 
   const [dept, setDept] = useState("");
   const [patientId, setPatientId] = useState(isPatient ? user.profileId || "" : "");
@@ -64,7 +64,7 @@ export default function BookAppointment() {
         <div className="card-body">
           <div className="row g-3">
             {!isPatient && (
-              <Field label="Patient ID" col="col-12">
+              <Field label="Patient ID" col="col-12" required>
                 <input type="number" min="1" className="form-control" value={patientId}
                   onChange={(e) => setPatientId(e.target.value)} required />
               </Field>
@@ -72,10 +72,10 @@ export default function BookAppointment() {
             <Field label="Department">
               <select className="form-select" value={dept} onChange={(e) => { setDept(e.target.value); setDoctorId(""); }}>
                 <option value="">All departments</option>
-                {DEPARTMENTS.map((d) => <option key={d}>{d}</option>)}
+                {DEPARTMENTS.map((d) => <option key={d} value={d}>{departmentLabel(d)}</option>)}
               </select>
             </Field>
-            <Field label="Doctor">
+            <Field label="Doctor" required>
               <select className="form-select" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} required>
                 <option value="">Select a doctor</option>
                 {(doctors || []).map((d) => (
@@ -85,11 +85,11 @@ export default function BookAppointment() {
                 ))}
               </select>
             </Field>
-            <Field label="Date">
+            <Field label="Date" required>
               <input type="date" min={todayStr()} className="form-control" value={date}
                 onChange={(e) => setDate(e.target.value)} required />
             </Field>
-            <Field label="Start time (30 min slot)">
+            <Field label="Start time (30 min slot)" required>
               <input type="time" step="1800" className="form-control" value={startTime}
                 onChange={(e) => setStartTime(e.target.value)} required />
             </Field>
@@ -102,7 +102,7 @@ export default function BookAppointment() {
           {error && <div className="alert alert-danger mt-3 mb-0">{error}</div>}
 
           <div className="mt-3">
-            <button className="btn btn-primary" disabled={saving || (isPatient && !user.profileId)}>
+            <button type="submit" className="btn btn-primary" disabled={saving || (isPatient && !user.profileId)}>
               {saving ? "Booking..." : "Book appointment"}
             </button>
           </div>

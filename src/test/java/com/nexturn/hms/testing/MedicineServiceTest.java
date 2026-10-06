@@ -139,12 +139,22 @@ class MedicineServiceTest {
 
 	@Test
 	void testUpdateMedicineToExistingName() {
-		MedicineResponseDto first = medicineService.addMedicine(medicineDto());
-		MedicineResponseDto second = medicineService.addMedicine(medicineDto());
-		MedicineRequestDto updateDto = new MedicineRequestDto(first.medicineName(), new BigDecimal("30.00"), 10,
-				MedicineCategory.CAPSULE);
-		assertThrows(DuplicateMedicineException.class,
-				() -> medicineService.updateMedicine(second.medicineId(), updateDto));
+	    MedicineResponseDto first = medicineService.addMedicine(medicineDto());
+	    MedicineResponseDto second = medicineService.addMedicine(medicineDto());
+
+	    MedicineRequestDto updateDto = new MedicineRequestDto(
+	            first.medicineName(),
+	            new BigDecimal("30.00"),
+	            10,
+	            MedicineCategory.CAPSULE
+	    );
+
+	    int medicineId = second.medicineId();
+
+	    assertThrows(
+	            DuplicateMedicineException.class,
+	            () -> medicineService.updateMedicine(medicineId, updateDto)
+	    );
 	}
 
 	@Test
@@ -170,7 +180,7 @@ class MedicineServiceTest {
 		int patientId = patientService.registerPatient(new PatientRequestDto("Ravi", "Kumar", Gender.values()[0],
 				LocalDate.of(1995, 5, 10), "9876543210"))
 				.patientId();
-		int doctorId = doctorService.addDoctor(new DoctorRequestDto("Test", "Doctor", Department.Cardiology, "MBBS",
+		int doctorId = doctorService.addDoctor(new DoctorRequestDto("Test", "Doctor", Department.CARDIOLOGY, "MBBS",
 				"9999999999", new BigDecimal("500.00"))).doctorId();
 		int appointmentId = appointmentService.bookAppointment(new AppointmentRequestDto(patientId, doctorId,
 				LocalDate.now().plusDays(1), LocalTime.of(10, 0), "Fever")).appointmentId();

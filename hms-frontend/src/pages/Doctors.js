@@ -5,13 +5,13 @@ import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import Field from "../components/Field";
 import { addDoctor, deleteDoctor, getAllDoctors, getDoctorsByDepartment, updateDoctor } from "../services/ApiService";
-import { DEPARTMENTS } from "../config/constants";
+import { DEPARTMENTS, departmentLabel } from "../config/constants";
 
-const EMPTY = { firstName: "", lastName: "", department: "Cardiology", qualification: "", phoneNumber: "", consultationFee: "" };
+const EMPTY = { firstName: "", lastName: "", department: "CARDIOLOGY", qualification: "", phoneNumber: "", consultationFee: "" };
 
 export default function Doctors() {
   const { user } = useAuth();
-  const canEdit = user.role === "Administrator";
+  const canEdit = user.role === "ADMINISTRATOR";
 
   const [dept, setDept] = useState("");
   const { data, loading, error, reload } = useApi(
@@ -76,7 +76,7 @@ export default function Doctors() {
         <div className="d-flex gap-2">
           <select className="form-select" value={dept} onChange={(e) => setDept(e.target.value)}>
             <option value="">All departments</option>
-            {DEPARTMENTS.map((d) => <option key={d}>{d}</option>)}
+            {DEPARTMENTS.map((d) => <option key={d} value={d}>{departmentLabel(d)}</option>)}
           </select>
           {canEdit && (
             <button className="btn btn-primary text-nowrap" onClick={openAdd}>
@@ -105,7 +105,7 @@ export default function Doctors() {
                   <tr key={d.doctorId}>
                     <td>{d.doctorId}</td>
                     <td>Dr. {d.firstName} {d.lastName}</td>
-                    <td><span className="badge text-bg-primary">{d.department}</span></td>
+                    <td><span className="badge text-bg-primary">{departmentLabel(d.department)}</span></td>
                     <td>{d.qualification}</td>
                     <td>{d.phoneNumber}</td>
                     <td>{d.consultationFee}</td>
@@ -134,16 +134,16 @@ export default function Doctors() {
         <Modal title={form.id ? "Edit doctor" : "Add doctor"} size="modal-lg" onClose={() => setForm(null)}>
           <form onSubmit={save}>
             <div className="row g-3">
-              <Field label="First name"><input className="form-control" value={form.values.firstName} onChange={set("firstName")} required /></Field>
-              <Field label="Last name"><input className="form-control" value={form.values.lastName} onChange={set("lastName")} required /></Field>
-              <Field label="Department">
+              <Field label="First name" required><input className="form-control" value={form.values.firstName} onChange={set("firstName")} required /></Field>
+              <Field label="Last name" required><input className="form-control" value={form.values.lastName} onChange={set("lastName")} required /></Field>
+              <Field label="Department" required>
                 <select className="form-select" value={form.values.department} onChange={set("department")}>
-                  {DEPARTMENTS.map((d) => <option key={d}>{d}</option>)}
+                  {DEPARTMENTS.map((d) => <option key={d} value={d}>{departmentLabel(d)}</option>)}
                 </select>
               </Field>
-              <Field label="Qualification"><input className="form-control" value={form.values.qualification} onChange={set("qualification")} required /></Field>
-              <Field label="Phone"><input className="form-control" value={form.values.phoneNumber} onChange={set("phoneNumber")} required /></Field>
-              <Field label="Consultation fee">
+              <Field label="Qualification" required><input className="form-control" value={form.values.qualification} onChange={set("qualification")} required /></Field>
+              <Field label="Phone" required><input className="form-control" value={form.values.phoneNumber} onChange={set("phoneNumber")} required /></Field>
+              <Field label="Consultation fee" required>
                 <input type="number" min="0" step="0.01" className="form-control" value={form.values.consultationFee} onChange={set("consultationFee")} required />
               </Field>
             </div>

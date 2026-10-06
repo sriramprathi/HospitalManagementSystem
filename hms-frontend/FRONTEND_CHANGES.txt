@@ -1,0 +1,38 @@
+HMS FRONTEND CHANGES
+====================
+
+1. Login password eye button
+   - Added show/hide password control on the login page.
+
+2. Backend error messages
+   - ApiService now reads message, error, detail, validation errors, and plain-text error responses.
+   - React pages continue to display err.message.
+
+3. Medicines / Bills
+   - Fixed the duplicate Medicines route in App.js so the real Medicines page is used instead of the old Placeholder route.
+   - Bills is still a Placeholder because the backend snapshot available for this project does not contain a BillController/Bill API contract. A frontend-only change cannot make a missing backend controller work.
+
+4. Doctor / Patient profile
+   - Added My Profile page for doctors and patients.
+   - Doctors and patients can update their own details.
+   - Doctors and patients can add/update their address.
+   - Added profile navigation in the sidebar/navbar.
+
+5. Password change
+   - Added Change Password UI with show/hide controls.
+   - Uses PUT /api/users/change-password with userId, oldPassword and newPassword.
+
+6. Mandatory field markers
+   - Added red * markers to mandatory form labels and prescription required inputs.
+
+7. Backend enum alignment
+   - Updated frontend role, department, gender and appointment-status values to match the current uppercase backend enums.
+   - Human-friendly labels are still shown in the UI.
+
+8. Verification
+   - npm run build completed successfully.
+
+Backend dependency note:
+- Address UI assumes PUT /api/users/{userId}/address for the save/update operation.
+- If the backend AddressController uses a different HTTP method, that one ApiService mapping must match it.
+- Bills cannot be made functional until the backend exposes its BillController endpoints.

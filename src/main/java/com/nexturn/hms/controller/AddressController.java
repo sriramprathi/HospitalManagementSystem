@@ -1,5 +1,6 @@
 package com.nexturn.hms.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +21,10 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class AddressController {
 
-	private final AddressService addressService;
+	@Autowired
+	AddressService addressService;
 
-	public AddressController(AddressService addressService) {
-		this.addressService = addressService;
-	}
 
-	// one endpoint for both adding a new address and updating the existing one
 	@PutMapping
 	public ResponseEntity<AddressResponseDto> saveOrUpdateAddress(@PathVariable int userId,
 			@Valid @RequestBody AddressRequestDto dto) {

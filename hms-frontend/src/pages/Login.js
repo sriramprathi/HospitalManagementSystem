@@ -50,11 +50,12 @@ export default function Login() {
       let profileId;
 
       try {
-        if (data.role === "PATIENT") {
+        const role = data.role.toUpperCase();
+        if (role === "PATIENT") {
           profileId = (await getPatientByUserId(data.userId)).patientId;
         }
         
-        if (data.role === "DOCTOR") {
+        if (role === "DOCTOR") {
           profileId = (await getDoctorByUserId(data.userId)).doctorId;
         }
       } catch (e2) {

@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
-import Placeholder from "./components/Placeholder";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
@@ -12,6 +11,11 @@ import BookAppointment from "./pages/BookAppointment";
 import Prescriptions from "./pages/Prescriptions";
 import { PATHS } from "./config/roles";
 import Medicines from "./pages/Medicines";
+import Bills from "./pages/Bills";
+import Staff from "./pages/Staff";
+import Profile from "./pages/Profile";
+
+
 
 export default function App() {
   return (
@@ -34,9 +38,10 @@ export default function App() {
             <Route path={PATHS.appointments} element={<Appointments />} />
             <Route path={PATHS.bookAppointment} element={<BookAppointment />} />
             <Route path={PATHS.prescriptions} element={<Prescriptions />} />
-            <Route path={PATHS.medicines} element={<Placeholder title="Medicines" what="Medicine" />} />
-            <Route path={PATHS.bills} element={<Placeholder title="Bills" what="Bill" />} />
+            <Route path={PATHS.bills} element={<Bills />} />
             <Route path={PATHS.medicines} element={<Medicines />} />
+            <Route path={PATHS.staff} element={<Staff />} />
+            <Route path={PATHS.profile} element={<Profile />} />
           </Route>
 
           <Route path="*" element={<Navigate to={PATHS.dashboard} replace />} />

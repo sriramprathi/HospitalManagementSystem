@@ -1,8 +1,10 @@
 package com.nexturn.hms.controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +31,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/appointments")
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class AppointmentController {
-   private final AppointmentService appointmentService;
+	
+	@Autowired
+	AppointmentService appointmentService;
 
-   public AppointmentController(AppointmentService appointmentService) {
-	this.appointmentService = appointmentService;
-   }
 
     @PostMapping
 	public ResponseEntity<AppointmentResponseDto> bookAppointment(@Valid @RequestBody AppointmentRequestDto dto) {
@@ -76,5 +77,9 @@ public class AppointmentController {
  		return ResponseEntity.ok(appointmentService.updateStatus(appointmentId, status));
  	}
 
-    
+ 	@GetMapping("/doctor/{doctorId}/slots")
+	public ResponseEntity<List<LocalTime>> getAvailableSlots(@PathVariable int doctorId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		return ResponseEntity.ok(appointmentService.getAvailableSlots(doctorId, date));
+	}
 }

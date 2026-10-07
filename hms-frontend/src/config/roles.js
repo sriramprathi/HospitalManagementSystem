@@ -7,6 +7,7 @@ export const PATHS = {
   medicines: "/medicines",
   prescriptions: "/prescriptions",
   bills: "/bills",
+  staff: "/staff",
   profile: "/profile",
 };
 
@@ -18,11 +19,12 @@ const book = { label: "Book Appointment", path: PATHS.bookAppointment, icon: "bi
 const medicines = { label: "Medicines", path: PATHS.medicines, icon: "bi-capsule" };
 const prescriptions = { label: "Prescriptions", path: PATHS.prescriptions, icon: "bi-file-medical" };
 const bills = { label: "Bills", path: PATHS.bills, icon: "bi-receipt" };
+const staff = { label: "Staff", path: PATHS.staff, icon: "bi-person-lines-fill" };   
 const profile = { label: "My Profile", path: PATHS.profile, icon: "bi-person-circle" };
 
 // Role names must match the backend Role enum exactly.
 export const ROLES = {
-  ADMINISTRATOR: { menu: [dashboard, patients, doctors, appointments, medicines, prescriptions, bills] },
+  ADMINISTRATOR: { menu: [dashboard, patients, doctors,staff, appointments, medicines, prescriptions, bills] },
   DOCTOR: { menu: [dashboard, appointments, prescriptions, patients, profile] },
   PATIENT: {
     menu: [

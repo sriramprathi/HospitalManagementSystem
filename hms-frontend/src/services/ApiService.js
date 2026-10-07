@@ -93,6 +93,8 @@ export const updateAppointmentStatus = (id, status) =>
   request(`/appointments/${id}/status?status=${status}`, {
     method: "PATCH",
   });
+  export const getAvailableSlots = (doctorId, date) =>
+  request(`/appointments/doctor/${doctorId}/slots?date=${date}`);
 
 // ---------- Prescriptions ----------
 export const createPrescription = (appointmentId, dto) =>
@@ -128,3 +130,7 @@ export const generateConsultationBill = (appointmentId) =>
 export const generateMedicineBill = (prescriptionId) =>
   request(`/bills/medicine/prescription/${prescriptionId}`, { method: "POST" });
 export const updateBillStatus = (id, status) => request(`/bills/${id}/status?status=${status}`, { method: "PATCH" });
+
+export const getUsersByRole = (role) => request(`/users/role/${role}`);
+export const registerUser = (dto) => request("/users/register", send("POST", dto));
+export const deleteUser = (userId) => request(`/users/${userId}`, { method: "DELETE" });

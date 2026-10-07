@@ -1,5 +1,6 @@
 package com.nexturn.hms.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 		if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
 			throw new InvalidPrescriptionException("Cannot create a prescription for a cancelled appointment");
+		}
+		// a prescription is written during or after the consultation, never before the appointment time
+		boolean notStartedYet = appointment.getStatus() == AppointmentStatus.SCHEDULED
+				&& LocalDateTime.of(appointment.getDate(), appointment.getStartTime()).isAfter(LocalDateTime.now());
+		if (notStartedYet) {
+			throw new InvalidPrescriptionException("A prescription can be written only after the appointment has started");
 		}
 		// one prescription per appointment
 		if (prescriptionRepo.existsByAppointmentAppointmentId(appointmentId)) {

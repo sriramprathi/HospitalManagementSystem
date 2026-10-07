@@ -18,8 +18,9 @@ const star = <span className="text-danger">*</span>;
 
 export default function Bills() {
   const { user } = useAuth();
-  const isPatient = user.role === "Patient";
-  const canManage = user.role === "Administrator" || user.role === "Receptionist";
+  const role = user.role.toUpperCase();
+  const isPatient = role === "PATIENT";
+  const canManage =  role === "RECEPTIONIST";
 
   const [statusFilter, setStatusFilter] = useState("");
   const [actionError, setActionError] = useState("");

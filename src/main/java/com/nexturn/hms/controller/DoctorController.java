@@ -2,6 +2,7 @@ package com.nexturn.hms.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,12 +27,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/doctors")
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class DoctorController {
-
-	private final DoctorService doctorService;
-
-	public DoctorController(DoctorService doctorService) {
-		this.doctorService = doctorService;
-	}
+	
+	@Autowired
+	DoctorService doctorService;
 
 	@PostMapping
 	public ResponseEntity<DoctorRegisteredResponseDto> addDoctor(@Valid @RequestBody DoctorRequestDto dto) {

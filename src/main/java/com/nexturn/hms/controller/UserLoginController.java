@@ -2,6 +2,7 @@ package com.nexturn.hms.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,12 +30,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class UserLoginController {
+	
+	@Autowired
+	UserLoginService userLoginService;
 
-	private final UserLoginService userLoginService;
-
-	public UserLoginController(UserLoginService userLoginService) {
-		this.userLoginService = userLoginService;
-	}
 
 	@PostMapping("/register")
 	public ResponseEntity<UserCredentialsResponseDto> registerNewUser(@Valid @RequestBody NewUserRequestDto dto) {

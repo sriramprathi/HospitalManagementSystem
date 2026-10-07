@@ -21,7 +21,8 @@ export default function Appointments() {
   const navigate = useNavigate();
   const isDoctor = user.role === "DOCTOR";
   const isPatient = user.role === "PATIENT";
-  const canComplete = isDoctor || user.role === "ADMINISTRATOR";
+  const isViewOnly = user.role.toUpperCase() === "ADMINISTRATOR";
+  const canComplete = isDoctor;
   const canSeePrescriptions = canAccess(user.role, PATHS.prescriptions);
 
   const [date, setDate] = useState(todayStr()); // used by Administrator / Receptionist
@@ -111,7 +112,7 @@ export default function Appointments() {
                     <td>{a.disease}</td>
                     <td><span className={`badge text-bg-${STATUS_COLOR[a.status] || "secondary"}`}>{statusLabel(a.status)}</span></td>
                     <td className="text-end text-nowrap">
-                      {a.status === "SCHEDULED" && (
+                      {a.status === "SCHEDULED" && !isViewOnly && (
                         <>
                           {canComplete && (
                             <button

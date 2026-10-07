@@ -1,7 +1,7 @@
 package com.nexturn.hms.controller;
 
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.nexturn.hms.dto.PatientRegisteredResponseDto;
 import com.nexturn.hms.dto.PatientRequestDto;
 import com.nexturn.hms.dto.PatientResponseDto;
@@ -26,11 +25,9 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class PatientController {
 
-	private final PatientService patientService;
+	@Autowired
+	PatientService patientService;
 
-	public PatientController(PatientService patientService) {
-		this.patientService = patientService;
-	}
 
 	@PostMapping
 	public ResponseEntity<PatientRegisteredResponseDto> registerPatient(@Valid @RequestBody PatientRequestDto dto) {

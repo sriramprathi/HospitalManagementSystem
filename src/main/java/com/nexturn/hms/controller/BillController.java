@@ -2,6 +2,7 @@ package com.nexturn.hms.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,12 +22,9 @@ import com.nexturn.hms.service.BillService;
 @RequestMapping("/api/bills")
 @CrossOrigin(origins = "${app.cors.allowed-origin}")
 public class BillController {
-
-	private final BillService billService;
-
-	public BillController(BillService billService) {
-		this.billService = billService;
-	}
+	
+	@Autowired
+	BillService billService;
 
 	@PostMapping("/consultation/appointment/{appointmentId}")
 	public ResponseEntity<BillResponseDto> generateConsultationBill(@PathVariable int appointmentId) {

@@ -17,8 +17,8 @@ const EMPTY = {
 
 export default function Patients() {
   const { user } = useAuth();
-  const canEdit = user.role === "Administrator" || user.role === "Receptionist";
-  const canDelete = user.role === "Administrator";
+const canEdit = user.role === "ADMINISTRATOR" || user.role === "RECEPTIONIST";
+const canDelete = user.role === "ADMINISTRATOR";
 
   const { data, loading, error, reload } = useApi(getAllPatients);
   const [search, setSearch] = useState("");

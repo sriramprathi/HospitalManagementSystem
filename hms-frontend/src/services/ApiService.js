@@ -1,6 +1,5 @@
 const BASE_URL = "http://localhost:8888/api";
 
-// Every backend call goes through this one function
 export async function request(path, options = {}) {
   let res;
   try {
@@ -9,13 +8,11 @@ export async function request(path, options = {}) {
       ...options,
     });
   } catch (e) {
-    // the browser could not get any answer: backend is down, or the response was blocked
     throw new Error("Cannot reach the server. Please check that the backend is running.");
   }
  
   if (!res.ok) {
-    // CHANGED: the backend sends the error message as plain text, not JSON,
-    // so read it as text first and only then try JSON
+   
     let message = `Request failed (${res.status})`;
     const text = await res.text();
     if (text) {
